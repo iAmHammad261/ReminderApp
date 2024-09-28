@@ -4,6 +4,6 @@ import CreateNewTaskScreen from '../screens/CreateNewTaskScreen.js'
 
 export default function Index() {
   return (
-      <CreateNewTaskScreen/>
+      <HomeScreen/>
   );
 }

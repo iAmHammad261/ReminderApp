@@ -12,6 +12,7 @@ const StylesForHomeScreen = StyleSheet.create({
     },
     viewForSettingIcon: {
         flexDirection: 'row',
+        paddingTop: '5%',
         justifyContent: 'flex-end',
     },
     textInput: {

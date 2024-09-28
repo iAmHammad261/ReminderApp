@@ -6,8 +6,11 @@ import SearchIcon from "../components/SearchIcon.js";
 import FilterIcon from "../components/FilterIcon.js";
 import AddIcon from "../components/AddIcon.js";
 import { FlashList } from "@shopify/flash-list";
+import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   const LIST_OF_TASKS = [
     {
       taskID: "13423456",
@@ -47,7 +50,6 @@ export default function HomeScreen() {
   ];
 
   const renderItem = ({ item }) => {
-    console.log("executed");
     return (
       <View style={StylesForHomeScreen.viewForTask}>
         <Text style={StylesForHomeScreen.taskText}>{item.nameOfTask}</Text>
@@ -59,9 +61,10 @@ export default function HomeScreen() {
     );
   };
 
-  const onPress = () => {
-    console.log("Add task is pressed")
-  }
+  const onPressOfAddTask = () => {
+    console.log("pressed");
+    router.push("/AddNewTaskScreen/AddNewTaskScreen");
+  };
 
   return (
     <View style={StylesForHomeScreen.container}>
@@ -93,7 +96,10 @@ export default function HomeScreen() {
       </View>
       {/* list for adding buttons */}
       <View style={StylesForHomeScreen.viewForAddTaskPressable}>
-        <Pressable onPress={onPress} style={StylesForHomeScreen.pressableForAddingTask}>
+        <Pressable
+          onPress={onPressOfAddTask}
+          style={StylesForHomeScreen.pressableForAddingTask}
+        >
           <AddIcon />
         </Pressable>
       </View>
