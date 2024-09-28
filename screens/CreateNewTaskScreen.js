@@ -24,12 +24,13 @@ export default function CreateNewTaskScreen() {
   const [time, setTime] = useState(new Date(new Date().getTime()));
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [arrayOfSelectedOption, setArrayOfSelectedOption] = useState([]);
+  const [errorsForFormValidation, setErrorsForFormValidation] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
-    reminderDate: "",
-    reminderTime: "",
+    reminderDate: new Date(),
+    reminderTime: new Date(new Date().getTime()),
     note: "",
-    repeat: "",
+    repeat: [],
   });
   const router = useRouter();
 
@@ -94,31 +95,46 @@ export default function CreateNewTaskScreen() {
 
     if (arrayOfSelectedOption.includes(days[id])) {
       // Remove "Monday" from the array immutably
-      setFormData((formData)=> ({...formData, repeat: arrayOfSelectedOption.filter((item) => item !== days[id])}))
+      setFormData((formData) => ({
+        ...formData,
+        repeat: arrayOfSelectedOption.filter((item) => item !== days[id]),
+      }));
       setArrayOfSelectedOption((arrayOfSelectedOption) =>
         arrayOfSelectedOption.filter((item) => item !== days[id])
       );
-
-
     } else {
       // Add "Monday" to the array immutably
-      setFormData((formData)=> ({...formData, repeat: [...arrayOfSelectedOption, days[id],]}))
+      setFormData((formData) => ({
+        ...formData,
+        repeat: [...arrayOfSelectedOption, days[id]],
+      }));
       setArrayOfSelectedOption((arrayOfSelectedOption) => [
         ...arrayOfSelectedOption,
         days[id],
       ]);
-
     }
   };
 
-  const validateOnSavePressable = () => {
-    Object.keys(formData).forEach(key=> {
-      console.log(key);
-    })
-    
+  useEffect(() => {
+    console.log(formData);
+    console.log(formData.reminderDate.toDateString());
+  }, [formData]);
+
+  const checkForFormValidation = (dataToBeChecked) => {
+    return (( !isCheckboxChecked && dataToBeChecked.title !== '') | ( isCheckboxChecked && ( dataToBeChecked.repeat.length > 0) & (dataToBeChecked.title !== '')))
+
   }
 
+  const validateOnSavePressable = () => {
+    if(checkForFormValidation(formData))
+    {
+      router.navigate('/')
+    }
+    else{
+      console.log("unsuccessful")
+    }
 
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -140,7 +156,10 @@ export default function CreateNewTaskScreen() {
           <View style={StylesForAddNewTask.viewForFormSection}>
             <Text style={StylesForAddNewTask.textForValue}>Title</Text>
             <TextInput
-              style={StylesForAddNewTask.textInputStyle}
+              style={[
+                StylesForAddNewTask.textInputStyle,
+                formData.title === "" && { borderColor: "red", borderWidth: 2 },
+              ]}
               placeholder="Enter Task"
               value={formData.title}
               onChangeText={(value) => handleInputChange("title", value)}
@@ -228,6 +247,11 @@ export default function CreateNewTaskScreen() {
                     arrayOfSelectedOption.includes("Monday")
                       ? StylesForAddNewTaskScreen.forOptionSelected
                       : StylesForAddNewTaskScreen.forOption,
+
+                    isCheckboxChecked & (arrayOfSelectedOption.length == 0) && {
+                      borderWidth: 2,
+                      borderColor: "red",
+                    },
                   ]}
                   onPress={() => handlePressOfPressableForRepeat("0")}
                 >
@@ -246,6 +270,10 @@ export default function CreateNewTaskScreen() {
                     arrayOfSelectedOption.includes("Tuesday")
                       ? StylesForAddNewTaskScreen.forOptionSelected
                       : StylesForAddNewTaskScreen.forOption,
+                    isCheckboxChecked & (arrayOfSelectedOption.length == 0) && {
+                      borderWidth: 2,
+                      borderColor: "red",
+                    },
                   ]}
                   onPress={() => handlePressOfPressableForRepeat("1")}
                 >
@@ -264,6 +292,10 @@ export default function CreateNewTaskScreen() {
                     arrayOfSelectedOption.includes("Wednesday")
                       ? StylesForAddNewTaskScreen.forOptionSelected
                       : StylesForAddNewTaskScreen.forOption,
+                    isCheckboxChecked & (arrayOfSelectedOption.length == 0) && {
+                      borderWidth: 2,
+                      borderColor: "red",
+                    },
                   ]}
                   onPress={() => handlePressOfPressableForRepeat("2")}
                 >
@@ -284,6 +316,10 @@ export default function CreateNewTaskScreen() {
                     arrayOfSelectedOption.includes("Thursday")
                       ? StylesForAddNewTaskScreen.forOptionSelected
                       : StylesForAddNewTaskScreen.forOption,
+                    isCheckboxChecked & (arrayOfSelectedOption.length == 0) && {
+                      borderWidth: 2,
+                      borderColor: "red",
+                    },
                   ]}
                   onPress={() => handlePressOfPressableForRepeat("3")}
                 >
@@ -302,6 +338,10 @@ export default function CreateNewTaskScreen() {
                     arrayOfSelectedOption.includes("Friday")
                       ? StylesForAddNewTaskScreen.forOptionSelected
                       : StylesForAddNewTaskScreen.forOption,
+                    isCheckboxChecked & (arrayOfSelectedOption.length == 0) && {
+                      borderWidth: 2,
+                      borderColor: "red",
+                    },
                   ]}
                   onPress={() => handlePressOfPressableForRepeat("4")}
                 >
@@ -320,6 +360,10 @@ export default function CreateNewTaskScreen() {
                     arrayOfSelectedOption.includes("Saturday")
                       ? StylesForAddNewTaskScreen.forOptionSelected
                       : StylesForAddNewTaskScreen.forOption,
+                    isCheckboxChecked & (arrayOfSelectedOption.length == 0) && {
+                      borderWidth: 2,
+                      borderColor: "red",
+                    },
                   ]}
                   onPress={() => handlePressOfPressableForRepeat("5")}
                 >
@@ -340,6 +384,10 @@ export default function CreateNewTaskScreen() {
                     arrayOfSelectedOption.includes("Sunday")
                       ? StylesForAddNewTaskScreen.forOptionSelected
                       : StylesForAddNewTaskScreen.forOption,
+                    isCheckboxChecked & (arrayOfSelectedOption.length == 0) && {
+                      borderWidth: 2,
+                      borderColor: "red",
+                    },
                   ]}
                   onPress={() => handlePressOfPressableForRepeat("6")}
                 >
